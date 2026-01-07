@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reddit-url-harvester"
+version = "0.1.0"
+description = "Python package to fetch and parse Reddit thread/comment JSON with optional proxy support"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+authors = [
+    {name = "Wiley", email = "wiley@example.com"}
+]
+keywords = ["reddit", "scraper", "api", "json"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP",
+]
+dependencies = [
+    "requests>=2.31.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/reddit-url-harvester"
+Documentation = "https://github.com/yourusername/reddit-url-harvester/blob/main/README.md"
+Repository = "https://github.com/yourusername/reddit-url-harvester"
+Issues = "https://github.com/yourusername/reddit-url-harvester/issues"
+
+[project.scripts]
+reddit-json-scrape = "reddit_url_harvester.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
