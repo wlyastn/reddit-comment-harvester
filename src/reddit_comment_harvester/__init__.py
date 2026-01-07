@@ -1,6 +1,6 @@
 """Reddit Comment Harvester - Extract Reddit threads and comments for research and analysis."""
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "Wiley"
 __email__ = "wiley@example.com"
 
