@@ -42,3 +42,5 @@ reddit-json-scrape = "reddit_url_harvester.cli:main"
 package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
+where = ["src"]
+include = ["reddit_url_harvester*"]

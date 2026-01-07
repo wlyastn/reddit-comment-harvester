@@ -1,39 +1,49 @@
-# Reddit URL Harvester
+# Reddit Comment Harvester
 
-**Reddit URL Harvester** is a lightweight Python package that scrapes Reddit threads and comments without requiring API keys or proxies. Built with automatic bot detection evasion for reliable scraping.
+A lightweight Python package for analyzing Reddit discussions. Extracts thread data and comments for research and data analysis purposes.
+
+**Disclaimer:** This tool is designed for educational and research purposes only. Users are responsible for ensuring compliance with Reddit's Terms of Service and applicable laws. Always use responsibly and respect rate limits.
+
+## Table of Contents
+- [About](#about)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [API Reference](#api-reference)
+- [CSV Format](#csv-format)
+- [Rate Limiting & Responsible Use](#rate-limiting--responsible-use)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## About
 
-Reddit URL Harvester provides a simple, Pythonic interface for extracting Reddit thread and comment data. No API keys, no registration, no complexity - just straightforward scraping.
+Reddit Comment Harvester provides a simple, Pythonic interface for extracting Reddit thread and comment data for analysis purposes. This is a research and data analysis tool designed to help researchers study Reddit discussions.
 
-**Features:**
-- No API Key Required
-- Bot Detection Evasion (User-Agent rotation, realistic headers, automatic delays)
-- Optional Proxy Support
-- Batch Processing with Error Handling
-- CSV File Support
-- Full Comment Extraction
-- Connection Pooling & Efficient Session Reuse
+**Important:** This tool should be used in accordance with Reddit's Terms of Service. Always implement responsible scraping practices including reasonable delays between requests and respecting server resources.
 
-## Installation
+## Getting Started
+
+This section covers installation and basic setup.
+
+### Installation
 
 Install via pip:
 
 ```bash
-pip install reddit-url-harvester
+pip install reddit-comment-harvester
 ```
 
 Or install from source:
 
 ```bash
-git clone https://github.com/yourusername/reddit-url-harvester.git
-cd reddit-url-harvester
+git clone https://github.com/wlyastn/reddit-comment-harvester.git
+cd reddit-comment-harvester
 pip install -e .
 ```
 
-## Quick Start
+### Quick Start
 
-### Basic Usage with RedditScraper
+Basic usage for extracting thread data:
 
 ```python
 from reddit_url_harvester import RedditScraper
@@ -41,7 +51,7 @@ from reddit_url_harvester import RedditScraper
 scraper = RedditScraper()
 thread = scraper.scrape("https://reddit.com/r/python/comments/abc123/")
 
-print(f"{thread.title}")
+print(f"Title: {thread.title}")
 print(f"Subreddit: {thread.subreddit}")
 print(f"Comments: {len(thread.comments)}")
 
@@ -49,7 +59,18 @@ for comment in thread.comments[:3]:
     print(f"  {comment.author}: {comment.body[:80]}")
 ```
 
-### Batch Processing URLs
+## Usage
+
+### Scrape a Single Thread
+
+```python
+from reddit_url_harvester import RedditScraper
+
+scraper = RedditScraper()
+thread = scraper.scrape("https://reddit.com/r/python/comments/abc123/")
+```
+
+### Batch Process Multiple URLs
 
 ```python
 from reddit_url_harvester import RedditScraper
@@ -84,9 +105,7 @@ print(f"Saved {len(results)} results to results.csv")
 
 ## Configuration
 
-### RedditScraper Parameters
-
-All parameters are optional. Defaults are optimized for reliable scraping:
+All parameters are optional. Defaults are optimized for reliable and responsible scraping:
 
 ```python
 scraper = RedditScraper(
@@ -96,26 +115,26 @@ scraper = RedditScraper(
 )
 ```
 
-### Example with Proxy
+### Configuration Parameters
 
-```python
-scraper = RedditScraper(
-    timeout=30.0,
-    delay=True,
-    proxies={"https": "http://proxy.example.com:8080"}
-)
+**timeout** (float): Request timeout in seconds. Default: 60.0
+- Increase for slower connections or larger responses
 
-thread = scraper.scrape("https://reddit.com/r/python/comments/abc123/")
-```
+**delay** (bool): Enable automatic random delays between requests. Default: True
+- Recommended to keep enabled for responsible scraping
+- Delays typically 2-6 seconds to simulate human behavior
 
-### Changing Configuration
+**proxies** (dict): Optional proxy configuration
+- Format: `{"https": "http://proxy.example.com:8080"}`
+
+### Updating Configuration
 
 ```python
 scraper = RedditScraper()
 
 scraper.set_timeout(45.0)
-scraper.set_delay(False)
-scraper.set_proxy({"http": "http://proxy.example.com:8080"})
+scraper.set_delay(True)
+scraper.set_proxy({"https": "http://proxy.example.com:8080"})
 
 thread = scraper.scrape(url)
 ```
@@ -124,7 +143,7 @@ thread = scraper.scrape(url)
 
 ### RedditScraper Class
 
-#### `scrape(url: str) -> Thread`
+#### scrape(url: str) -> Thread
 
 Scrape a single Reddit thread or comment.
 
@@ -132,7 +151,7 @@ Scrape a single Reddit thread or comment.
 thread = scraper.scrape("https://reddit.com/r/python/comments/abc123/")
 ```
 
-#### `scrape_batch(urls: List[str], skip_errors: bool = True) -> List[Thread]`
+#### scrape_batch(urls: List[str], skip_errors: bool = True) -> List[Thread]
 
 Scrape multiple URLs and return results.
 
@@ -140,7 +159,7 @@ Scrape multiple URLs and return results.
 threads = scraper.scrape_batch(urls, skip_errors=True)
 ```
 
-#### `scrape_csv(input_file: str, output_file: Optional[str] = None, url_column: str = "URL", skip_errors: bool = True) -> List[dict]`
+#### scrape_csv(input_file: str, output_file: Optional[str] = None, url_column: str = "URL", skip_errors: bool = True) -> List[dict]
 
 Scrape URLs from a CSV file and optionally save results.
 
@@ -151,6 +170,8 @@ results = scraper.scrape_csv("urls.csv", output_file="results.csv")
 ### Data Models
 
 #### Thread
+
+Represents a Reddit thread with the following attributes:
 
 ```python
 thread.title          # str - Thread title
@@ -164,6 +185,8 @@ thread.comments       # List[Comment] - List of comments
 
 #### Comment
 
+Represents a comment with the following attributes:
+
 ```python
 comment.author        # str - Comment author username
 comment.body          # str - Comment text/content
@@ -171,31 +194,11 @@ comment.score         # int - Comment upvotes/score
 comment.timestamp     # str - Comment timestamp
 ```
 
-## Function-Based API (Legacy)
-
-If you prefer the function-based interface:
-
-```python
-from reddit_url_harvester import scrape_thread
-
-thread = scrape_thread("https://reddit.com/r/python/comments/abc123/")
-```
-
-## How Bot Detection Evasion Works
-
-**User-Agent Rotation:** Automatically rotates between 8 realistic user agents (Windows/Mac/Linux, Chrome/Firefox/Edge/Safari)
-
-**Realistic Headers:** Includes Accept, Accept-Language, DNT, and Sec-Fetch-* headers
-
-**Automatic Delays:** 2-6 second random delays between requests to simulate human behavior
-
-**Connection Pooling:** Reuses HTTP connections efficiently while maintaining realistic patterns
-
-This approach allows reliable scraping without proxy services or API keys.
-
 ## CSV Format
 
-**Input CSV** (`urls.csv`):
+### Input CSV
+
+Format your input file with a header row containing at least a URL column:
 
 ```csv
 URL
@@ -204,54 +207,48 @@ https://reddit.com/r/python/comments/def456/
 https://reddit.com/r/programming/comments/ghi789/
 ```
 
-**Output CSV** (`results.csv`):
+### Output CSV
+
+Results are saved with the following columns:
 
 ```csv
 url,title,subreddit,post_id,num_comments,author,score
 https://reddit.com/r/python/comments/abc123/,Title Here,python,abc123,42,author_name,150
-...
 ```
 
 ## Rate Limiting & Responsible Use
 
-**Important:** Respect Reddit's Terms of Service
+This is a research and data analysis tool. Responsible use is critical:
 
-- Use reasonable delays (default 2-6 seconds is good)
-- Don't hammer Reddit's servers
-- Consider implementing backoff strategies for production use
-- Cache results when possible
-- Monitor for 429 (Too Many Requests) responses
+- Enable automatic delays (default: True) - respects Reddit's servers
+- Use reasonable intervals between requests (2-6 second default delays)
+- Do not attempt to circumvent rate limiting
+- Cache and reuse results when possible
+- Monitor for 429 (Too Many Requests) responses and back off
+- Do not use this tool to violate Reddit's Terms of Service
+- Consider the ethical implications of your research
 
-## Examples
+### Handling Rate Limits
 
-See [examples.py](examples.py) for more detailed usage examples.
-
-## Troubleshooting
-
-### 429 Too Many Requests
-
-Increase delays or add proxy support:
+If you encounter 429 errors:
 
 ```python
 scraper = RedditScraper(delay=True)  # Ensure delay is enabled
+# Increase timeout for slower responses
+scraper.set_timeout(90.0)
 ```
 
-### Timeout Errors
+### Troubleshooting
 
-Increase the timeout:
+**429 Too Many Requests:** Increase delays or add exponential backoff
 
-```python
-scraper = RedditScraper(timeout=90.0)
-thread = scraper.scrape(url)
-```
+**Timeout Errors:** Increase the timeout parameter
 
-### SSL Errors
-
-Consider using a proxy or try again later.
+**SSL Errors:** Try using a proxy or verify your internet connection
 
 ## Contributing
 
-Contributions welcome! 
+Contributions are welcome. Please ensure any contributions maintain responsible scraping practices:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -263,7 +260,15 @@ Contributions welcome!
 
 MIT License - see [LICENSE](LICENSE) file for details
 
-## Disclaimer
+## Contact & Disclaimer
 
-This tool is for educational and research purposes. Users are responsible for ensuring their use of this tool complies with Reddit's Terms of Service and applicable laws in their jurisdiction.
+**Important Disclaimer:** This tool is for educational and research purposes only. Users are solely responsible for:
+- Ensuring compliance with Reddit's Terms of Service
+- Complying with all applicable laws and regulations in their jurisdiction
+- Using this tool responsibly and ethically
+- Respecting rate limits and server resources
+- Obtaining any necessary permissions before scraping
+- Protecting user privacy and data
+
+The creators of this tool are not responsible for misuse or violations of Reddit's Terms of Service. Use at your own risk.
 # reddit-comment-harvester
