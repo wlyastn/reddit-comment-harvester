@@ -3,16 +3,16 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "reddit-url-harvester"
+name = "reddit-comment-harvester"
 version = "0.1.0"
-description = "Python package to fetch and parse Reddit thread/comment JSON with optional proxy support"
+description = "Extract Reddit threads and comment trees for research and analysis"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"
 authors = [
     {name = "Wiley", email = "wiley@example.com"}
 ]
-keywords = ["reddit", "scraper", "api", "json"]
+keywords = ["reddit", "comments", "research", "data-analysis", "scraper"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -30,10 +30,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/reddit-url-harvester"
-Documentation = "https://github.com/yourusername/reddit-url-harvester/blob/main/README.md"
-Repository = "https://github.com/yourusername/reddit-url-harvester"
-Issues = "https://github.com/yourusername/reddit-url-harvester/issues"
+Homepage = "https://github.com/wlyastn/reddit-comment-harvester"
+Documentation = "https://github.com/wlyastn/reddit-comment-harvester/blob/main/README.md"
+Repository = "https://github.com/wlyastn/reddit-comment-harvester"
+Issues = "https://github.com/wlyastn/reddit-comment-harvester/issues"
 
 [project.scripts]
 reddit-json-scrape = "reddit_url_harvester.cli:main"
