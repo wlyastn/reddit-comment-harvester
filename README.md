@@ -8,16 +8,17 @@ Built for research workflows where you already have thread URLs and want repeata
 
 ## Why This Exists
 
-Many tools rely on Reddit's API (like PRAW), which requires authentication and limits access. This tool fetches public thread pages and parses the rendered HTML directly, so you can:
+Many tools rely on Reddit's API (like PRAW), which requires authentication and limits access. This tool fetches public `.json` endpoints directly from Reddit, so you can:
 
 - Extract threads without API registration
 - Get full comment trees with metadata (authors, scores, timestamps)
 - Export to CSV for analysis
+- Access raw JSON for custom processing
 - Add optional randomized delays to reduce request bursts
 
 **What it doesn't do:** vote, post, access private/restricted communities, or authenticate with Reddit.
 
-**How it works:** Uses BeautifulSoup to parse Reddit's public HTML pages (no official API required).
+**How it works:** Appends `.json` to Reddit thread/comment URLs and parses the returned JSON (no API keys required).
 
 ## Table of Contents
 - [About](#about)
@@ -34,7 +35,7 @@ Many tools rely on Reddit's API (like PRAW), which requires authentication and l
 
 ## About
 
-Reddit Comment Harvester is a lightweight Python package for research workflows involving Reddit discussions. It extracts thread and comment data by parsing Reddit's public HTML pages, without requiring API authentication.
+Reddit Comment Harvester is a lightweight Python package for research workflows involving Reddit discussions. It extracts thread and comment data from Reddit's public `.json` endpoints, without requiring API authentication.
 
 **Data captured:**
 - Thread: title, author, score, subreddit, post date, comment count
@@ -177,13 +178,15 @@ thread.comments[0]
 
 ### CSV Export
 
-When exported to CSV, each row represents one comment (the post becomes a metadata header):
+When exported to CSV, each row represents one comment (the post metadata repeats for each comment):
 
 ```csv
-url,title,subreddit,post_id,author,score,comment_author,comment_body,comment_score,comment_depth
-https://reddit.com/r/python/comments/abc123/,Why Python is best...,python,abc123,john_coder,2847,jane_dev,"Great explanation! Especially liked...",245,0
-https://reddit.com/r/python/comments/abc123/,Why Python is best...,python,abc123,john_coder,2847,mike_learn,"I disagree with point 2 because...",89,1
+url,title,subreddit,post_id,author,post_score,num_comments,comment_author,comment_body,comment_score,comment_depth
+https://reddit.com/r/python/comments/abc123/,Why Python is best...,python,abc123,john_coder,2847,156,jane_dev,"Great explanation! Especially liked...",245,0
+https://reddit.com/r/python/comments/abc123/,Why Python is best...,python,abc123,john_coder,2847,156,mike_learn,"I disagree with point 2 because...",89,1
 ```
+
+**Note:** Each comment creates a new row with the full post metadata. For large threads, this results in many rows. Consider filtering or grouping if needed.
 
 ## Configuration
 
