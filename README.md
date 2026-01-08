@@ -291,13 +291,26 @@ https://reddit.com/r/python/comments/def456/
 
 ### Output Format
 
-Post metadata repeats on each row (one comment per row):
+Each row represents one comment (post metadata repeats for each comment):
 
 ```csv
-url,title,subreddit,author,score,num_comments
-https://reddit.com/r/python/comments/abc123/,Why Python is best...,python,john_coder,2847,156
-https://reddit.com/r/python/comments/abc123/,Why Python is best...,python,john_coder,2847,156
+url,title,subreddit,post_id,author,post_score,num_comments,comment_author,comment_body,comment_score,comment_depth
+https://reddit.com/r/python/comments/abc123/,Why Python is best...,python,abc123,john_coder,2847,156,jane_dev,"Great explanation! Especially liked...",245,0
+https://reddit.com/r/python/comments/abc123/,Why Python is best...,python,abc123,john_coder,2847,156,mike_learn,"I disagree with point 2 because...",89,1
 ```
+
+**Column definitions:**
+- `url`: Reddit thread URL
+- `title`: Post title
+- `subreddit`: Subreddit name
+- `post_id`: Reddit post ID
+- `author`: Post author username
+- `post_score`: Post upvotes/score
+- `num_comments`: Total comment count in thread
+- `comment_author`: Comment author username
+- `comment_body`: Comment text
+- `comment_score`: Comment upvotes/score
+- `comment_depth`: Nesting depth (0 = top-level, 1+ = replies)
 
 ## Rate Limiting & Responsible Use
 
