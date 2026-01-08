@@ -37,17 +37,18 @@ class RedditScraper:
         self.delay = delay
         self.proxies = proxies
 
-    def scrape(self, url: str) -> Thread:
+    def scrape(self, url: str, return_raw: bool = False) -> Thread | dict:
         """
         Scrape a single Reddit thread.
 
         Args:
             url: Reddit thread URL
+            return_raw: Return raw JSON response instead of parsed Thread object (default: False)
 
         Returns:
-            Thread object with post and comments
+            Thread object with post and comments, or raw JSON dict if return_raw=True
         """
-        return scrape_thread(url, timeout=self.timeout)
+        return scrape_thread(url, timeout=self.timeout, proxies=self.proxies, delay=self.delay, return_raw=return_raw)
 
     def scrape_batch(self, urls: List[str], skip_errors: bool = True) -> List[Thread]:
         """
@@ -109,7 +110,7 @@ class RedditScraper:
                 "subreddit": thread.subreddit,
                 "author": thread.author,
                 "score": thread.score,
-                "num_comments": thread.num_comments,
+                "num_comments": len(thread.comments),
             }
             results.append(result)
         

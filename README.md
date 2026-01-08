@@ -116,6 +116,34 @@ results = scraper.scrape_csv(
 print(f"Saved {len(results)} results to results.csv")
 ```
 
+### Get Raw JSON Response
+
+For advanced use cases, you can retrieve the raw JSON response from Reddit:
+
+```python
+from reddit_comment_harvester import RedditScraper
+import json
+
+scraper = RedditScraper()
+
+# Get raw JSON instead of parsed Thread object
+raw_json = scraper.scrape("https://reddit.com/r/python/comments/abc123/", return_raw=True)
+
+# Save to file for custom processing
+with open("reddit_data.json", "w") as f:
+    json.dump(raw_json, f, indent=2)
+
+# Or process directly
+post_data = raw_json[0]["data"]["children"][0]["data"]
+comments_data = raw_json[1]["data"]
+```
+
+**Why use raw JSON?**
+- Custom data processing and analysis
+- Access all Reddit API fields (not just parsed subset)
+- Full comment tree with all nesting levels
+- Flexibility for research workflows
+
 ## Example Output
 
 ### Thread Object
@@ -187,13 +215,21 @@ scraper.set_proxy({"https": "http://proxy.example.com:8080"})
 
 ### RedditScraper Class
 
-#### scrape(url: str) -> Thread
+#### scrape(url: str, return_raw: bool = False) -> Thread | dict
 
 Scrape a single Reddit thread or comment.
 
 ```python
+# Get parsed Thread object (default)
 thread = scraper.scrape("https://reddit.com/r/python/comments/abc123/")
+
+# Get raw JSON response
+raw_json = scraper.scrape("https://reddit.com/r/python/comments/abc123/", return_raw=True)
 ```
+
+**Parameters:**
+- `url`: Reddit thread or comment URL
+- `return_raw`: If `True`, return raw JSON dict instead of parsed Thread object (default: `False`)
 
 #### scrape_batch(urls: List[str], skip_errors: bool = True) -> List[Thread]
 
