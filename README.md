@@ -117,6 +117,51 @@ results = scraper.scrape_csv(
 print(f"Saved {len(results)} results to results.csv")
 ```
 
+### Custom CSV Export
+
+For more control over CSV output, manually scrape and export:
+
+```python
+from reddit_comment_harvester import RedditScraper
+import csv
+
+scraper = RedditScraper()
+
+# Scrape multiple threads
+urls = [
+    "https://reddit.com/r/python/comments/abc123/",
+    "https://reddit.com/r/python/comments/def456/",
+]
+threads = scraper.scrape_batch(urls)
+
+# Export to CSV with full comment data
+with open("comments.csv", "w", newline='', encoding='utf-8') as f:
+    writer = csv.DictWriter(f, fieldnames=[
+        'url', 'title', 'subreddit', 'post_id', 'author', 
+        'post_score', 'num_comments', 'comment_author', 
+        'comment_body', 'comment_score', 'comment_depth'
+    ])
+    writer.writeheader()
+    
+    for thread in threads:
+        for comment in thread.comments:
+            writer.writerow({
+                'url': thread.url,
+                'title': thread.title,
+                'subreddit': thread.subreddit,
+                'post_id': thread.post_id,
+                'author': thread.author,
+                'post_score': thread.score,
+                'num_comments': thread.num_comments,
+                'comment_author': comment.author,
+                'comment_body': comment.body,
+                'comment_score': comment.score,
+                'comment_depth': comment.depth
+            })
+
+print(f"Exported comments to comments.csv")
+```
+
 ### Get Raw JSON Response
 
 For advanced use cases, you can retrieve the raw JSON response from Reddit:
